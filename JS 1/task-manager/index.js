@@ -1,41 +1,71 @@
-let task = "";
+const tasks = [];
+
 let completedTaskCount = 0;
 
-function showTask() {
-    if (!task) {
-        console.log("Задача отсутствует");
-    } else {
-        console.log(task)
-    }
-}
 
-function setTask(taskDescription) {
-    if (!taskDescription) {
+function setTask(title, description = "Описание отсутствует") {
+    if (!title) {
         console.log("Нельзя добавить пустую задачу")
         return;
     }
-    if (task) {
-        console.log("Не могу добавить задачу, завершите или удалите предыдущую");
+    const task = {
+        title: title,
+        description: description,
+        isCompleted: false,
+        createdDate: new Date().toDateString(),
+        completedDate: null
+    }
+    tasks.push(task)
+
+}
+
+function showTask() {
+    if (tasks.length === 0) {
+        console.log("Задачи отсутствуют");
+    } else {
+        tasks.forEach((task) => { console.log(`title: ${task.title},description: ${task.description},isCompleted: ${task.isCompleted},createdDate: ${task.createdDate},completedDate: ${task.completedDate}`) })
+    }
+}
+
+function completeTask(index) {
+    if (index < 0 || index >= tasks.length || tasks[index].isCompleted) {
+        console.log("Введите корректный индекс задачи или задача уже выполнена")
         return;
+    }
+    tasks[index].isCompleted = true;
+    tasks[index].completedDate = new Date().toDateString();
+    completedTaskCount++;
+    return tasks[index];
+
+}
+
+
+function deleteTask(index) {
+    let result;
+    if (index < 0 || index >= tasks.length) {
+        console.log("Неверный индекс");
+        return
+    }
+    if (!tasks[index].isCompleted) {
+        result = confirm("Таска ещё не выполнена, удалить?");
+        if (result) {
+            tasks.splice(index, 1);
+            console.log("Задача удалена");
+            return;
+        } else {
+            console.log("Задача не удалена");
+        }
     } else {
-        task = taskDescription;
-        console.log(task)
+        tasks.splice(index, 1);
+
+        console.log("Задача удалена");
     }
 }
 
-function completeTask() {
-    if (task) {
-        task = "";
-        completedTaskCount++;
-    } else {
-        console.log("Нет задачи для выполнения")
-    }
-}
 
-function deleteTask() {
-    if (task) {
-        task = "";
-    } else {
-        console.log("Нет задач для удаления")
-    }
+
+function clearTasks() {
+    if (tasks.length > 0) { tasks.length = 0 }
+    else { console.log("Нет задач для очищения") }
+
 }
