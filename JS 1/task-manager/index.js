@@ -28,7 +28,7 @@ function showTask() {
 }
 
 function completeTask(index) {
-    if (index < 0 || index >= tasks.length || tasks[index].isCompleted) {
+    if (index < 0 || index >= tasks.length || tasks[index].isCompleted || typeof index !== "number") {
         console.log("Введите корректный индекс задачи или задача уже выполнена")
         return;
     }
